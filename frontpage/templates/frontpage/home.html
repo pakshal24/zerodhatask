@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<style>
+    .body {
+        margin: 3em;
+    }
+</style>
+
+<body class="body">
+    <form name="form" method="POST" action="#">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="input" class="form-control" placeholder="Enter Equity Name" aria-label="Enter Equity Name"
+                aria-describedby="basic-addon2" id="name" name="name">
+            <div class="input-group-append">
+                <button class="btn btn-outline-danger" type="submit" type="button">Search</button>
+             <button class="btn btn-outline-info" type="button" type="button" onclick = "download_table_as_csv()">Download as CSV</button>
+                
+            </div>
+        </div>
+        <!-- <input type="input" id="name" name="name" />
+        <button type="submit" name="save" id="save" value="save" class="button">Submit</button> -->
+        <table class="table table-striped" id = "data">
+            <thead class="thead-dark">
+                <tr>
+                    <th>CODE</th> 
+                    <th>NAME</th>
+                    <th>OPEN</th>
+                    <th>HIGH</th>
+                    <th>LOW</th>
+                    <th>CLOSE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if result|length == 0 %}
+                <tr>
+                    <p>
+                        <h3>No Equity Found with given Name</h3>
+                    </p>
+                </tr>
+                {%endif%}
+                {% for row in result%}
+                <tr>
+                    <td>{{row.code}}</td>
+                    <td>{{row.name}}</td>
+                    <td>{{row.open}}</td>
+                    <td>{{row.high}}</td>
+                    <td>{{row.low}}</td>
+                    <td>{{row.close}}</td>
+                </tr>
+                {%endfor%}
+        </table>
+    </form>
+    <script>
+        function download_table_as_csv(table_id = "data", separator = ',') {
+            // Select rows from table_id
+            var rows = document.querySelectorAll('table#' + table_id + ' tr');
+            // Construct csv
+            var csv = [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = [],
+                    cols = rows[i].querySelectorAll('td, th');
+                for (var j = 0; j < cols.length; j++) {
+                    // Clean innertext to remove multiple spaces and jumpline (break csv)
+                    var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                    // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                    data = data.replace(/"/g, '""');
+                    // Push escaped string
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(separator));
+            }
+            var csv_string = csv.join('\n');
+            // Download it
+            var filename = "{{ equity }}" + '_' + new Date().toLocaleDateString() + '.csv';
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('target', '_blank');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script> 
+</body>
+
+
+</html>
