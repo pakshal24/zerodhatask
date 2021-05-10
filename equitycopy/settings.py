@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'equitycopy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
-        'NAME'      : 'zerodhadb',
+        'NAME'      : 'zerodhataskdb',
         'USER'      : 'postgres',
         'PASSWORD'  : '1234',
         'HOST'      : 'localhost',

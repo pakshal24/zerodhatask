@@ -27,8 +27,8 @@ try:
         
         csvfile = links[50:58] + '.CSV'
         date = links[52:58]
-        date = date[52:54] + '/' + date[54:56] + '/' + date[56:58]
-        cache.set('todaydate',date)
+        date = date[0:2] + '/' + date[2:4] + '/' + date[4:6]
+        cache.set('todaydate',date,timeout=None)
         #cache.set('file',csvfile)
         finalres = get(links,headers=headers)
         filename = "bhavcopy.zip"
