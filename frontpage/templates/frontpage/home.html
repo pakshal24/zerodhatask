@@ -14,9 +14,16 @@
     .body {
         margin: 3em;
     }
+    .update {
+        margin: 1em;
+        left: 1em;
+        font-size:small ;
+        color: black;
+    }
 </style>
 
 <body class="body">
+    <div class="update">Data as on {{date}}<br>Note:This Data is daily updated at 6:00 pm (IST)</div>
     <form name="form" method="POST" action="#">
         {% csrf_token %}
         <div class="input-group mb-3">

@@ -34,8 +34,8 @@ def search(response):
         else:
             result = query(name)
         cache.set(name,result)
-
-    context = {'result' : result , 'equity' : name}
+    aajkidate = cache.get('todaydate')
+    context = {'result' : result , 'equity' : name ,'date': aajkidate}
     return render(response,"frontpage/home.html",context)
 
 
