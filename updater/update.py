@@ -12,8 +12,6 @@ from django.core.cache import cache
 import os
 try:
     def getZip():
-        print('start')
-
         cache.clear()
         if cache.get('FULLRESULT'):
             print("not cleared")
@@ -27,18 +25,18 @@ try:
                     links = str(link.get('href'))
                     break
         
-        print(links)
         csvfile = links[50:58] + '.CSV'
+        date = links[52:58]
+        date = date[52:54] + '/' + date[54:56] + '/' + date[56:58]
+        cache.set('todaydate',date)
         #cache.set('file',csvfile)
         finalres = get(links,headers=headers)
-        print(finalres)
         filename = "bhavcopy.zip"
         with open(filename,"wb") as fd:
             print("extracting")
             fd.write(finalres.content)    
             fd.close()
         
-        print(res)
         zipextractor()
         datauploader(csvfile)
 except Exception as e:
@@ -61,8 +59,6 @@ def datauploader(csvfile):
             i+=1
             continue
         newbhav = bhav()
-        if(i == 1) :
-            print(row)
         newbhav.code = row[0]
         newbhav.name = row[1].strip()
         newbhav.open = row[4]
@@ -73,7 +69,6 @@ def datauploader(csvfile):
         i+=1
     print("done")
     file.close()
-    os.remove(csvfile)
 '''    if cache.get('file'):
         oldfile = cache.get('file')
         os.remove(oldfile)'''
