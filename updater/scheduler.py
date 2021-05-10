@@ -11,6 +11,6 @@ from updater import update
 def start():
     print("Start")
     scheduler = BackgroundScheduler()
-    #scheduler.add_job(update.getZip, 'cron',day_of_week='mon-fri',hour=13 ,minute = 40)
-    scheduler.add_job(update.getZip,'interval',minutes=5)
+    scheduler.add_job(update.getZip, 'cron',day_of_week='mon-fri',hour=12 ,minute = 30)
+    #scheduler.add_job(update.getZip,'interval',minutes=5)
     scheduler.start()
